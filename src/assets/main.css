@@ -1,0 +1,17 @@
+@import "./base.css";
+
+body {
+  background: #eef3f5;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
