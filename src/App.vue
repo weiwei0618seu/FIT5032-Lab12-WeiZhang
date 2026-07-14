@@ -1,9 +1,8 @@
 <script setup>
-import Form from './components/Form.vue'
-// import JSONLab from './components/JSON.vue'
+import BHeader from './components/BHeader.vue'
 </script>
 
 <template>
-  <Form />
-  <!-- <JSONLab /> -->
+  <BHeader />
+  <RouterView />
 </template>

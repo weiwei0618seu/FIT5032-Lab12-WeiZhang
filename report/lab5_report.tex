@@ -1,0 +1,793 @@
+\documentclass[a4paper,11pt]{article}
+
+% ================================================================
+% Packages
+% ================================================================
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{mathptmx}
+\usepackage{xcolor}
+\usepackage{verbatim}
+
+% ================================================================
+% Page and paragraph settings
+% ================================================================
+\geometry{margin=2.54cm}
+\singlespacing
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.2em}
+
+% ================================================================
+% Section title formatting
+% ================================================================
+\titleformat{\section}
+{\Large\bfseries}
+{\thesection}
+{1em}
+{}
+
+\titleformat{\subsection}
+{\large\bfseries}
+{\thesubsection}
+{1em}
+{}
+
+\titleformat{\subsubsection}
+{\normalsize\bfseries}
+{\thesubsubsection}
+{1em}
+{}
+
+\titlespacing*{\section}
+{0pt}
+{1.1ex plus 1ex minus .2ex}
+{0.7ex plus .2ex}
+
+\titlespacing*{\subsection}
+{0pt}
+{0.9ex plus 1ex minus .2ex}
+{0.45ex plus .2ex}
+
+\titlespacing*{\subsubsection}
+{0pt}
+{0.7ex plus 1ex minus .2ex}
+{0.25ex plus .2ex}
+
+% ================================================================
+% Header and footer
+% ================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{
+    FIT5032 Internet Applications Development -- Assessed Lab 5
+}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ================================================================
+% Editable student and project information
+% ================================================================
+% Modify the following information before submission.
+
+\newcommand{\studentname}{Wei Zhang}
+\newcommand{\studentid}{36668699}
+\newcommand{\tutorialgroup}{Tuesday 2:00 pm}
+\newcommand{\tutorname}{Yujie Wang}
+\newcommand{\submissiondate}{24 July 2026}
+
+% Replace this with your actual project and GitHub repository if needed.
+\newcommand{\projectname}{FIT5032-Lab5-WeiZhang}
+\newcommand{\githuburl}{https://github.com/weiwei0618seu/FIT5032-Lab5-WeiZhang}
+
+% ================================================================
+% Document information
+% ================================================================
+\title{
+    Event Handling, Two-Way Data Binding, and Vue Router Navigation
+}
+
+\author{
+    \renewcommand{\arraystretch}{1.35}
+    \begin{tabular}
+        {|>{\bfseries}p{4.2cm}|p{8.2cm}|}
+        \hline
+        Student Name
+        & \studentname
+        \\ \hline
+        Student ID
+        & \studentid
+        \\ \hline
+        Tutorial/Lab
+        & \tutorialgroup
+        \\ \hline
+        Project Name
+        & \texttt{\projectname}
+        \\ \hline
+    \end{tabular}
+}
+
+\date{\submissiondate}
+
+% ================================================================
+% Custom cover page
+% ================================================================
+\makeatletter
+
+\newcommand{\makecover}{
+\begin{titlepage}
+
+    \linespread{1.05}\selectfont
+    \centering
+    \vspace*{0.3cm}
+
+    % Put the Monash logo file in the same folder as this .tex file.
+    % Suggested filename:
+    % monash-university-vector-logo.png
+
+    \IfFileExists{monash-university-vector-logo.png}{
+        \includegraphics[width=0.95\textwidth]
+        {monash-university-vector-logo.png}
+        \par
+    }{
+        \fbox{
+            \parbox[c][2.8cm][c]{0.90\textwidth}{
+                \centering
+                \textbf{Monash University Logo Placeholder}
+                \\[0.3em]
+                Add
+                \texttt{monash-university-vector-logo.png}
+                to this folder.
+            }
+        }
+        \par
+    }
+
+    \vspace{0.8cm}
+
+    {\LARGE
+        \textsc{Monash University}
+        \par
+    }
+
+    \vspace{0.3cm}
+
+    {\Large
+        \textsc{Faculty of Information Technology}
+        \par
+    }
+
+    \vspace{0.8cm}
+
+    {\Large
+        \textbf{FIT5032 Internet Applications Development}
+        \par
+    }
+
+    \vspace{0.3cm}
+
+    {\Large
+        \textbf{Assessed Lab 5}
+        \par
+    }
+
+    \vspace{0.5cm}
+
+    \rule{\textwidth}{1.2pt}
+    \\[0.4cm]
+
+    {\LARGE\bfseries
+        \@title
+        \par
+    }
+
+    \rule{\textwidth}{1.2pt}
+    \\[1.5cm]
+
+    \vfill
+
+    {\Large
+        \@author
+        \par
+    }
+
+    \vspace{1.5cm}
+
+    {\large
+        \textbf{Tutor Name:}
+        \tutorname
+        \par
+    }
+
+    \vspace{0.5cm}
+
+    {\large
+        \@date
+        \par
+    }
+
+    \vspace*{1cm}
+
+\end{titlepage}
+}
+
+\makeatother
+
+% ================================================================
+% Screenshot helper
+% ================================================================
+% Usage:
+%
+% \labscreenshot
+% {filename.png}
+% {Caption text}
+% {fig:label}
+%
+% If the image does not exist, LaTeX displays a placeholder.
+
+\newcommand{\labscreenshot}[3]{
+\begin{figure}[H]
+
+    \centering
+
+    \IfFileExists{#1}{
+        \includegraphics[width=0.94\textwidth]{#1}
+    }{
+        \fbox{
+            \parbox[c][6.5cm][c]{0.90\textwidth}{
+                \centering
+
+                \textbf{Screenshot Placeholder}
+                \\[0.5em]
+
+                Expected file:
+                \texttt{\detokenize{#1}}
+                \\[0.5em]
+
+                Replace this box by placing the screenshot
+                in the same folder as the
+                \texttt{.tex} file.
+            }
+        }
+    }
+
+    \caption{#2}
+    \label{#3}
+
+\end{figure}
+}
+
+% ================================================================
+% Large code/file evidence helper
+% ================================================================
+% This is useful for Task 5.2 because the required files should be
+% shown on separate pages.
+
+\newcommand{\fileevidence}[3]{
+\clearpage
+\section*{File Evidence: \texttt{#1}}
+\addcontentsline{toc}{section}{File Evidence: #1}
+
+\labscreenshot
+{#2}
+{#3}
+{fig:#2}
+}
+
+% ================================================================
+% Small editable note box
+% ================================================================
+\newcommand{\editnote}[1]{
+\begin{center}
+\fbox{
+    \parbox{0.90\textwidth}{
+        \textbf{Before submission:} #1
+    }
+}
+\end{center}
+}
+
+% ================================================================
+% Document body
+% ================================================================
+\begin{document}
+
+% Cover page without a page number
+\pagenumbering{gobble}
+\makecover
+\newpage
+
+% Start normal page numbering
+\pagenumbering{arabic}
+
+% ================================================================
+\section{Lab Overview}
+% ================================================================
+
+This report presents the evidence completed for FIT5032 Assessed
+Lab 5. The lab focuses on Vue.js event handling, two-way data
+binding, Vue DevTools testing, and Vue Router navigation. The
+starter library application was extended with password confirmation
+validation, input-based feedback for the reason field, and routing
+between different views. For the distinction and high distinction
+component, custom routing and secure navigation were also
+implemented to restrict selected pages based on authentication
+status.
+
+All assessed implementation work was completed individually. Peer
+interaction was limited to technical discussion and mutual support
+during the laboratory session.
+
+% ================================================================
+\section{Project Setup}
+% ================================================================
+
+\subsection{Activity 5.1.1: Recreating the Starter Project}
+
+The Week 5 starter project was cloned from the official
+\texttt{NoMash-Library} repository using the \texttt{week-4-end}
+branch. The project was opened in Visual Studio Code, dependencies
+were installed, and the development server was started using:
+
+\begin{verbatim}
+npm run dev
+\end{verbatim}
+
+If the development server had a Vite-related issue, the following
+command could be used to install Vite:
+
+\begin{verbatim}
+npm install vite
+\end{verbatim}
+
+\labscreenshot
+{lab5_activity511_project_running.png}
+{Activity 5.1.1: The starter library application running on localhost.}
+{fig:project-running}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:project-running} shows that the starter library
+application was running successfully before the Week 5 modifications
+were added.
+
+% ================================================================
+\section{eFolio Task 5.1: Event Handling and Vue DevTools}
+% ================================================================
+
+\subsection{Activity 5.3.1: Confirm Password Field}
+
+A new \texttt{Confirm password} input field was added to the library
+registration form. The field was bound to
+\texttt{formData.confirmPassword} using \texttt{v-model}, and the
+corresponding error state was added to the \texttt{errors} object.
+
+\labscreenshot
+{lab5_activity531_confirm_password_form.png}
+{Activity 5.3.1: Modified library form with the Confirm password input field.}
+{fig:confirm-password-form}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:confirm-password-form} shows the updated form layout
+after the confirm password field was added.
+
+\subsection{Password Confirmation Validation}
+
+A custom event handler named \texttt{validateConfirmPassword} was
+implemented to compare the original password and the confirm password
+field. The validation was triggered using the \texttt{@blur} event,
+so that the error message appears after the user finishes typing and
+leaves the confirm password field.
+
+\labscreenshot
+{lab5_activity531_password_mismatch_error.png}
+{Activity 5.3.1: Error message displayed when the password and confirm password fields do not match.}
+{fig:password-mismatch-error}
+
+\labscreenshot
+{lab5_activity531_confirm_password_code.png}
+{Activity 5.3.1: Source code implementing confirm password validation with @blur.}
+{fig:confirm-password-code}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:password-mismatch-error} and
+~\ref{fig:confirm-password-code} show that the form displays the
+message \texttt{Passwords do not match.} when the two password fields
+are different.
+
+\subsection{Activity 5.3.2: Reason for Joining Input Feedback}
+
+The reason for joining field was also extended with input feedback.
+When the user enters text containing the word \texttt{friend}, a
+green message is displayed below the field:
+
+\begin{verbatim}
+Great to have a friend
+\end{verbatim}
+
+This demonstrates event-driven feedback and reactive data updates in
+the form.
+
+\labscreenshot
+{lab5_activity532_reason_friend_message.png}
+{Activity 5.3.2: Green feedback message displayed when the reason contains the word friend.}
+{fig:reason-friend-message}
+
+\labscreenshot
+{lab5_activity532_reason_friend_code.png}
+{Activity 5.3.2: Source code implementing the reason field feedback message.}
+{fig:reason-friend-code}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:reason-friend-message} and
+~\ref{fig:reason-friend-code} show the additional feedback behaviour
+for the reason for joining input field.
+
+\subsection{Vue DevTools Testing}
+
+Vue DevTools was used to inspect the component state during testing.
+The \texttt{formData} object was checked to verify that user input
+was correctly reflected in the component state through
+\texttt{v-model} two-way data binding.
+
+\labscreenshot
+{lab5_devtools_component_tree.png}
+{Vue DevTools showing the selected library registration form component.}
+{fig:devtools-component-tree}
+
+\labscreenshot
+{lab5_devtools_formdata_state.png}
+{Vue DevTools showing formData values, including password and confirmPassword.}
+{fig:devtools-formdata-state}
+
+\labscreenshot
+{lab5_devtools_vmodel_update.png}
+{Vue DevTools showing that form input changes are reflected in the component state.}
+{fig:devtools-vmodel-update}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:devtools-component-tree},
+~\ref{fig:devtools-formdata-state}, and
+~\ref{fig:devtools-vmodel-update} show the use of Vue DevTools to
+debug and test the component state.
+
+% ================================================================
+\section{Two-Way Data Binding Evidence}
+% ================================================================
+
+\subsection{Using v-model for Form Inputs}
+
+The form uses \texttt{v-model} to connect form inputs and component
+state. When the user edits a field on the page, the related value in
+\texttt{formData} is updated automatically. This confirms the use of
+two-way data binding in the Vue component.
+
+\labscreenshot
+{lab5_vmodel_confirm_password_code.png}
+{Source code showing v-model used for the confirm password field.}
+{fig:vmodel-confirm-password-code}
+
+\labscreenshot
+{lab5_vmodel_reason_code.png}
+{Source code showing v-model used for the reason for joining field.}
+{fig:vmodel-reason-code}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:vmodel-confirm-password-code} and
+~\ref{fig:vmodel-reason-code} show the use of \texttt{v-model} for
+two-way data binding in the form.
+
+% ================================================================
+\section{eFolio Task 5.2: Vue Router and Navigation}
+% ================================================================
+
+\subsection{Vue Router Setup}
+
+Vue Router was installed to convert the one-page application into a
+single-page application with multiple views. The following command
+was used:
+
+\begin{verbatim}
+npm install vue-router@latest
+\end{verbatim}
+
+A \texttt{src/views} folder was created to store page-level views,
+and a \texttt{src/router/index.js} file was created to define the
+application routes.
+
+\labscreenshot
+{lab5_router_install_terminal.png}
+{Terminal output showing Vue Router installation.}
+{fig:router-install-terminal}
+
+\labscreenshot
+{lab5_views_folder_structure.png}
+{Project structure showing the router folder and views folder.}
+{fig:views-folder-structure}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:router-install-terminal} and
+~\ref{fig:views-folder-structure} show the router installation and
+the project structure used for routing.
+
+\subsection{Navigation Header with router-link}
+
+The navigation menu was updated to use \texttt{router-link} instead
+of normal anchor tags. This allows users to move between views
+without refreshing the page.
+
+\labscreenshot
+{lab5_header_router_link_code.png}
+{Source code showing router-link used for Home, About, and Login navigation.}
+{fig:header-router-link-code}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:header-router-link-code} shows that the navigation
+menu uses Vue Router links for single-page application navigation.
+
+% ================================================================
+% Required file evidence for Task 5.2
+% Each required file is placed on a new page with a header.
+% ================================================================
+
+\fileevidence
+{src/router/index.js}
+{lab5_router_index_js_code.png}
+{Task 5.2: Source code of src/router/index.js showing route definitions and custom routing logic.}
+
+\fileevidence
+{src/App.vue}
+{lab5_app_vue_code.png}
+{Task 5.2: Source code of src/App.vue showing the router-view structure.}
+
+\fileevidence
+{src/views/HomeView.vue}
+{lab5_homeview_vue_code.png}
+{Task 5.2: Source code of src/views/HomeView.vue containing the registration form view.}
+
+% ================================================================
+\clearpage
+\section{Localhost Routing Evidence}
+% ================================================================
+
+\subsection{Home Page Route}
+
+The home route displays the registration form view. This confirms
+that the root route is correctly connected to \texttt{HomeView.vue}.
+
+\labscreenshot
+{lab5_localhost_home_page.png}
+{Application running on localhost with the Home page route open.}
+{fig:localhost-home-page}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:localhost-home-page} shows the application running
+on the Home page route.
+
+\subsection{About Page Route}
+
+The about route displays the library about page. This confirms that
+the \texttt{/about} route is correctly connected to the About view.
+
+\labscreenshot
+{lab5_localhost_about_page.png}
+{Application running on localhost with the About page route open.}
+{fig:localhost-about-page}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:localhost-about-page} shows the application running
+on the About page route.
+
+% ================================================================
+\section{Custom Routing and Secure Navigation}
+% ================================================================
+
+\subsection{Login Page}
+
+A login page was created to support secure navigation. The page uses
+\texttt{v-model} to bind the username and password input fields to
+component state.
+
+\labscreenshot
+{lab5_custom_login_page.png}
+{Custom routing: Login page with username and password fields.}
+{fig:custom-login-page}
+
+\labscreenshot
+{lab5_custom_login_code.png}
+{Source code implementing the Login page and hardcoded credential check.}
+{fig:custom-login-code}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:custom-login-page} and
+~\ref{fig:custom-login-code} show the login page used for custom
+routing.
+
+\subsection{Protected Route Before Login}
+
+The About page was configured as a protected route. When an
+unauthenticated user attempts to visit the protected route, the
+router redirects the user to the login page or an access-denied page.
+
+\labscreenshot
+{lab5_custom_about_redirect_before_login.png}
+{Custom routing: Unauthenticated user redirected when trying to access the protected About route.}
+{fig:about-redirect-before-login}
+
+\labscreenshot
+{lab5_custom_access_denied_page.png}
+{Custom routing: Access denied page shown to unauthenticated users.}
+{fig:access-denied-page}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:about-redirect-before-login} and
+~\ref{fig:access-denied-page} show that unauthenticated users cannot
+access protected content.
+
+\subsection{Successful Login and Protected Page Access}
+
+After entering the correct hardcoded credentials, the user is
+authenticated and can access the protected About page.
+
+\labscreenshot
+{lab5_custom_login_success.png}
+{Custom routing: Successful login using hardcoded credentials.}
+{fig:custom-login-success}
+
+\labscreenshot
+{lab5_custom_about_after_login.png}
+{Custom routing: Authenticated user successfully accesses the About page.}
+{fig:about-after-login}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:custom-login-success} and
+~\ref{fig:about-after-login} show that authenticated users can access
+the protected About route.
+
+\subsection{Logout Functionality}
+
+A logout option was added for authenticated users. After logging out,
+the user is no longer able to access protected routes.
+
+\labscreenshot
+{lab5_custom_logout_button.png}
+{Custom routing: Logout option displayed for authenticated users.}
+{fig:custom-logout-button}
+
+\labscreenshot
+{lab5_custom_after_logout_redirect.png}
+{Custom routing: User redirected after logout and protected access removed.}
+{fig:after-logout-redirect}
+
+\noindent
+\textbf{Brief description:}
+Figures~\ref{fig:custom-logout-button} and
+~\ref{fig:after-logout-redirect} show that logout clears the
+authenticated state and protects the restricted route again.
+
+\subsection{Navigation Guard Evidence}
+
+A navigation guard was implemented in the router to check whether a
+route requires authentication. If a route is protected and the user
+is not authenticated, navigation is blocked or redirected.
+
+\labscreenshot
+{lab5_custom_navigation_guard_code.png}
+{Source code showing the navigation guard used for secure routing.}
+{fig:navigation-guard-code}
+
+\noindent
+\textbf{Brief description:}
+Figure~\ref{fig:navigation-guard-code} shows the route guard used to
+control access to protected routes.
+
+% ================================================================
+\section{Evidence Checklist}
+% ================================================================
+
+\renewcommand{\arraystretch}{1.25}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}
+{0.96\textwidth}
+{|>{\bfseries}p{3.4cm}|X|>{\centering\arraybackslash}p{2.2cm}|}
+\hline
+Assessment Item & Evidence Included & Status \\ \hline
+
+Task 5.1 Password Confirmation
+& Screenshot showing the modified library form and the
+\texttt{Passwords do not match.} error message
+& Complete \\ \hline
+
+Task 5.1 Vue DevTools
+& Screenshots showing Vue DevTools component inspection and
+\texttt{formData} state changes
+& Complete \\ \hline
+
+Reason Field Feedback
+& Screenshots showing the green \texttt{Great to have a friend}
+message and related implementation code
+& Complete \\ \hline
+
+Two-Way Binding
+& Screenshots showing \texttt{v-model} usage and data updates through
+Vue DevTools
+& Complete \\ \hline
+
+Router Setup
+& Screenshots showing Vue Router installation, project structure, and
+navigation links
+& Complete \\ \hline
+
+Required File Evidence
+& Separate-page evidence for \texttt{router/index.js},
+\texttt{src/App.vue}, and \texttt{src/views/HomeView.vue}
+& Complete \\ \hline
+
+Localhost Home and About Pages
+& Screenshots showing the application open on the Home page and About
+page
+& Complete \\ \hline
+
+Custom Routing
+& Screenshots showing login, protected route redirect, authenticated
+access, logout, and navigation guard code
+& Complete \\ \hline
+
+\end{tabularx}
+\caption{Assessed Lab 5 evidence checklist.}
+\label{tab:evidence-checklist}
+\end{table}
+
+% ================================================================
+\section{Completion Summary}
+% ================================================================
+
+The required tasks for FIT5032 Assessed Lab 5 were completed
+successfully. The starter library application was recreated from the
+provided Week 4 end branch and extended with additional event
+handling and two-way data binding features. A confirm password field
+was added to the registration form, and a custom
+\texttt{@blur}-based validation function was implemented to show an
+error message when the two password fields do not match. The reason
+for joining field was also extended to display a green feedback
+message when the input contains the word \texttt{friend}. Vue
+DevTools was used to inspect and test component state, demonstrating
+the use of \texttt{v-model} for two-way data binding.
+
+For the advanced component, Vue Router was installed and configured.
+The application was reorganised into views, including a Home page and
+an About page. The navigation menu was updated using
+\texttt{router-link}, and \texttt{router-view} was used to render the
+current route. Custom secure routing was also implemented using a
+login page, hardcoded credentials, protected routes, and a navigation
+guard. The required screenshots and code evidence have been included
+in this report.
+
+\end{document}

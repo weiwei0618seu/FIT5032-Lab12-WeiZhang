@@ -1,17 +1,27 @@
-# FIT5032 Lab 4 — User Information Form
+# FIT5032 Lab 5 — Events, Data Binding, and Secure Routing
 
-This Vue 3 application extends the library project from Lab 3 with five
-Vue-based form validations and a PrimeVue DataTable for submitted user
-information.
+This Vue 3 application extends the Week 4 library project with event handling,
+two-way data binding, Vue Router navigation, and a demonstration-only protected
+members area.
 
 ## Features
 
-- Username length validation
-- Password complexity validation
-- Australian resident, gender, and reason validation
-- English validation feedback
-- PrimeVue DataTable with the Aura theme
-- Sortable submitted-user columns
+- Password confirmation validation triggered on blur
+- Reactive feedback when the reason contains the word `friend`
+- Vue DevTools support for inspecting `formData`
+- Home and About views using Vue Router
+- Hardcoded demonstration login and protected About route
+- Access Denied and logout flows
+- Existing PrimeVue DataTable and Lab 4 form validation
+
+## Demonstration Login
+
+The following hardcoded credentials are for the assessed lab demonstration only:
+
+```text
+Username: admin
+Password: password123
+```
 
 ## Project Setup
 
@@ -29,4 +39,13 @@ npm run dev
 
 ```sh
 npm run build
+```
+
+## Lab Report
+
+The LaTeX report and screenshot checker are in the `report` directory. After
+copying the required PNG files into that directory, run:
+
+```sh
+node report/check-screenshots.mjs
 ```

@@ -22,20 +22,40 @@
             </div>
           </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label">Password:</label>
-            <input
-              type="password"
-              class="form-control"
-              :class="{ 'is-invalid': errors.password }"
-              id="password"
-              name="password"
-              v-model="formData.password"
-              @blur="validatePassword(true)"
-              @input="validatePassword(false)"
-            />
-            <div v-if="errors.password" class="text-danger mt-1" role="alert">
-              {{ errors.password }}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="password" class="form-label">Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                :class="{ 'is-invalid': errors.password }"
+                id="password"
+                name="password"
+                autocomplete="new-password"
+                v-model="formData.password"
+                @blur="validatePassword(true)"
+                @input="validatePassword(false)"
+              />
+              <div v-if="errors.password" class="text-danger mt-1" role="alert">
+                {{ errors.password }}
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="confirm-password" class="form-label">Confirm password:</label>
+              <input
+                type="password"
+                class="form-control"
+                :class="{ 'is-invalid': errors.confirmPassword }"
+                id="confirm-password"
+                name="confirm-password"
+                autocomplete="new-password"
+                v-model="formData.confirmPassword"
+                @blur="validateConfirmPassword(true)"
+              />
+              <div v-if="errors.confirmPassword" class="text-danger mt-1" role="alert">
+                {{ errors.confirmPassword }}
+              </div>
             </div>
           </div>
 
@@ -89,6 +109,9 @@
             <div v-if="errors.reason" class="text-danger mt-1" role="alert">
               {{ errors.reason }}
             </div>
+            <div v-if="reasonMessage" class="text-success mt-1" role="status">
+              {{ reasonMessage }}
+            </div>
           </div>
 
           <div class="mb-4">
@@ -138,13 +161,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+
+defineOptions({
+  name: 'LibraryRegistrationForm',
+})
 
 const initialFormData = {
   username: '',
   password: '',
+  confirmPassword: '',
   resident: '',
   reason: '',
   gender: '',
@@ -155,6 +183,7 @@ const submittedUsers = ref([])
 const errors = ref({
   username: null,
   password: null,
+  confirmPassword: null,
   resident: null,
   gender: null,
   reason: null,
@@ -187,6 +216,18 @@ const validatePassword = (blur) => {
   }
 }
 
+/**
+ * Show a mismatch error after the user leaves the confirmation field.
+ * Waiting for blur avoids displaying an error while the user is still typing.
+ */
+const validateConfirmPassword = (blur) => {
+  if (formData.value.password !== formData.value.confirmPassword) {
+    if (blur) errors.value.confirmPassword = 'Passwords do not match.'
+  } else {
+    errors.value.confirmPassword = null
+  }
+}
+
 const validateResident = (blur) => {
   if (!formData.value.resident) {
     if (blur) errors.value.resident = 'Please select your Australian resident status.'
@@ -213,9 +254,14 @@ const validateReason = (blur) => {
   }
 }
 
+const reasonMessage = computed(() =>
+  formData.value.reason.toLowerCase().includes('friend') ? 'Great to have a friend' : '',
+)
+
 const submitForm = () => {
   validateName(true)
   validatePassword(true)
+  validateConfirmPassword(true)
   validateResident(true)
   validateGender(true)
   validateReason(true)
@@ -232,6 +278,7 @@ const clearForm = () => {
   errors.value = {
     username: null,
     password: null,
+    confirmPassword: null,
     resident: null,
     gender: null,
     reason: null,
