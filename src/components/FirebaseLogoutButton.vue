@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { firebaseAuth } from '../firebase'
+import { firebaseAuth } from '../Firebase/init'
 
 const router = useRouter()
 const isSigningOut = ref(false)
@@ -57,4 +57,3 @@ const handleFirebaseLogout = async () => {
     </p>
   </div>
 </template>
-

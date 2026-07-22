@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onAuthStateChanged } from 'firebase/auth'
-import { firebaseAuth } from '../firebase'
+import { firebaseAuth } from '../Firebase/init'
 import FirebaseLogoutButton from '../components/FirebaseLogoutButton.vue'
 import {
   FIREBASE_ROLES,

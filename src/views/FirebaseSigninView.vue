@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useRoute, useRouter } from 'vue-router'
-import { firebaseAuth } from '../firebase'
+import { firebaseAuth } from '../Firebase/init'
 import { getFirebaseRoleLabel, getFirebaseUserRole } from '../services/firebaseRoles'
 
 const route = useRoute()

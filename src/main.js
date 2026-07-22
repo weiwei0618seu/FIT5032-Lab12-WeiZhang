@@ -8,7 +8,7 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import App from './App.vue'
 import router from './router'
-import './firebase'
+import './Firebase/init'
 
 const app = createApp(App)
 
