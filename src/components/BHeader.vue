@@ -29,6 +29,9 @@ const handleLogout = () => {
         <li class="nav-item">
           <RouterLink to="/about" class="nav-link" active-class="active">About</RouterLink>
         </li>
+        <li class="nav-item">
+          <RouterLink to="/add-book" class="nav-link" active-class="active">Add Book</RouterLink>
+        </li>
         <li v-if="!isAuthenticated" class="nav-item">
           <RouterLink to="/login" class="nav-link" active-class="active">Week 5 Login</RouterLink>
         </li>
