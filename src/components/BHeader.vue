@@ -30,12 +30,22 @@ const handleLogout = () => {
           <RouterLink to="/about" class="nav-link" active-class="active">About</RouterLink>
         </li>
         <li v-if="!isAuthenticated" class="nav-item">
-          <RouterLink to="/login" class="nav-link" active-class="active">Login</RouterLink>
+          <RouterLink to="/login" class="nav-link" active-class="active">Week 5 Login</RouterLink>
         </li>
         <li v-else class="nav-item ms-2">
           <button type="button" class="btn btn-outline-danger" @click="handleLogout">
             Logout
           </button>
+        </li>
+        <li class="nav-item">
+          <RouterLink to="/FireRegister" class="nav-link" active-class="active">
+            Firebase Register
+          </RouterLink>
+        </li>
+        <li class="nav-item">
+          <RouterLink to="/FireLogin" class="nav-link" active-class="active">
+            Firebase Sign In
+          </RouterLink>
         </li>
       </ul>
     </nav>
