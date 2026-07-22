@@ -47,6 +47,11 @@ const handleLogout = () => {
             Firebase Sign In
           </RouterLink>
         </li>
+        <li class="nav-item">
+          <RouterLink to="/FirebaseAccount" class="nav-link" active-class="active">
+            Firebase Account
+          </RouterLink>
+        </li>
       </ul>
     </nav>
   </header>

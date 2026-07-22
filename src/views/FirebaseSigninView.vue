@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useRoute, useRouter } from 'vue-router'
 import { firebaseAuth } from '../firebase'
+import { getFirebaseRoleLabel, getFirebaseUserRole } from '../services/firebaseRoles'
 
 const route = useRoute()
 const router = useRouter()
@@ -40,15 +41,20 @@ const handleSignIn = async () => {
   try {
     await signInWithEmailAndPassword(firebaseAuth, email.value.trim(), password.value)
 
+    const role = getFirebaseUserRole(firebaseAuth.currentUser)
+    const roleLabel = getFirebaseRoleLabel(role)
+
     console.log('Firebase sign-in successful:', {
       uid: firebaseAuth.currentUser?.uid,
       email: firebaseAuth.currentUser?.email,
+      role,
+      roleLabel,
     })
     console.log('Current Firebase user:', firebaseAuth.currentUser)
+    console.log('Authenticated Firebase role:', roleLabel)
 
     await router.push({
-      name: 'Home',
-      query: { firebaseLogin: 'success' },
+      name: 'FirebaseAccount',
     })
   } catch (error) {
     console.error('Firebase sign-in failed:', error.code)
