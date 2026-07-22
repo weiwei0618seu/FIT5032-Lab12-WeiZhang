@@ -9,6 +9,7 @@ const route = useRoute()
 const router = useRouter()
 
 const registrationSucceeded = computed(() => route.query.registered === 'true')
+const logoutSucceeded = computed(() => route.query.loggedOut === 'true')
 const registeredEmail = computed(() =>
   typeof route.query.email === 'string' ? route.query.email : '',
 )
@@ -76,6 +77,9 @@ const handleSignIn = async () => {
             Firebase registration successful<span v-if="registeredEmail">
               for <strong>{{ registeredEmail }}</strong></span
             >. You can now sign in.
+          </div>
+          <div v-else-if="logoutSucceeded" class="alert alert-success" role="status">
+            Firebase logout successful. The current Firebase user is now null.
           </div>
           <p class="text-secondary mb-4">
             Sign in with the email address and password registered in Firebase Authentication.

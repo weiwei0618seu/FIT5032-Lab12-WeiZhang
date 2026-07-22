@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onAuthStateChanged } from 'firebase/auth'
 import { firebaseAuth } from '../firebase'
+import FirebaseLogoutButton from '../components/FirebaseLogoutButton.vue'
 import {
   FIREBASE_ROLES,
   getFirebaseRoleLabel,
@@ -82,6 +83,11 @@ onUnmounted(() => {
                 This account can access the standard NoMash Library user interface.
               </p>
             </section>
+
+            <div class="border-top mt-4 pt-4 d-flex align-items-center justify-content-between gap-3">
+              <p class="text-secondary mb-0">End the current Firebase authentication session.</p>
+              <FirebaseLogoutButton />
+            </div>
           </template>
 
           <div v-else class="alert alert-warning mb-0" role="alert">
@@ -93,4 +99,3 @@ onUnmounted(() => {
     </section>
   </main>
 </template>
-
