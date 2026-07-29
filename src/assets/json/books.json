@@ -1,0 +1,44 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "isbn": 9780141439518,
+      "name": "Pride and Prejudice"
+    },
+    {
+      "id": 2,
+      "isbn": 9780451524935,
+      "name": "1984"
+    },
+    {
+      "id": 3,
+      "isbn": 9780061120084,
+      "name": "To Kill a Mockingbird"
+    },
+    {
+      "id": 4,
+      "isbn": 9780743273565,
+      "name": "The Great Gatsby"
+    },
+    {
+      "id": 5,
+      "isbn": 9780141187761,
+      "name": "Animal Farm"
+    },
+    {
+      "id": 6,
+      "isbn": 9780007119318,
+      "name": "The Hobbit"
+    },
+    {
+      "id": 7,
+      "isbn": 9780140449136,
+      "name": "The Odyssey"
+    },
+    {
+      "id": 8,
+      "isbn": 9780141439600,
+      "name": "A Tale of Two Cities"
+    }
+  ]
+}

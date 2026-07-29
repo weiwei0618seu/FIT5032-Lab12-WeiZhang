@@ -1,0 +1,14 @@
+{
+  "name": "fit5032-lab9-book-count-function",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Task 9.1 JSON book-count HTTP function for Alibaba Cloud Function Compute.",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

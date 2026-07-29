@@ -1,80 +1,80 @@
-# FIT5032 Assessed Lab 8
+# FIT5032 Assessed Lab 9
 
-Vue.js and Cloud Firestore implementation for the NoMash Library application. This project extends the Firebase application from Lab 7 with book creation, retrieval, queries, updates, and deletion.
+Serverless cloud-function implementation for the NoMash Library Vue application.
+The project extends the Lab 8 Firestore application with two Alibaba Cloud
+Function Compute services.
 
-## Implemented features
+## Lab 9 features
 
-- Shared Firebase initialisation in `src/Firebase/init.js`
-- Cloud Firestore database instance exported for reuse
-- Add Book page with required ISBN and book-name validation
-- Numeric ISBN values stored in the Firestore `books` collection
-- Reusable `BookList.vue` component for retrieving and displaying documents
-- Firestore queries using `where`, `orderBy`, and `limit`
-- Combined filtering, ordering, and result limiting
-- Book updates using `doc` and `updateDoc`
-- Book deletion using `doc` and `deleteDoc`
-- Loading, success, validation, and error feedback
-- Existing Firebase Authentication features retained from Lab 7
+### Task 9.1 — JSON book count
 
-## Firestore data structure
+- Sends the local `books.json` dataset to an HTTP cloud function.
+- Validates the request and calculates the number of book objects.
+- Displays the returned count and cloud response in the Vue interface.
+- Supports browser CORS preflight requests.
 
-Each book is stored as a document in the `books` collection:
+Deployed endpoint:
 
 ```text
-books/{documentId}
-  isbn: number
-  name: string
+https://book-cofunction-cdfmfbrftp.cn-hangzhou.fcapp.run
 ```
 
-Example:
+### Task 9.2 — Firestore book data service
+
+- Reads live records from the Cloud Firestore `books` collection with the
+  Firebase Admin SDK.
+- Provides Basic, Standard, and Premium data packages.
+- Applies package-specific record limits, included fields, and prices.
+- Displays the generated package as a digital-data order with a responsive
+  result table.
+- Returns safe client errors without exposing Firestore or credential details.
+
+Deployed endpoint:
 
 ```text
-isbn: 1201
-name: "Cloud Firestore Basics"
+https://book-dafunction-tgkjwdwopa.cn-hongkong.fcapp.run
 ```
-
-## Firestore queries
-
-The Book List interface demonstrates the following database queries:
-
-| Query | Behaviour |
-| --- | --- |
-| `where('isbn', '>', 1000)` | Retrieves books with an ISBN greater than 1000 |
-| `orderBy('isbn', 'asc')` | Orders books by ISBN in ascending order |
-| `limit(3)` | Restricts the displayed result to three documents |
-| Combined query | Filters by ISBN, orders ascending, and returns at most three documents |
 
 ## Application routes
 
 | Route | Purpose |
 | --- | --- |
-| `/add-book` | Create, retrieve, query, update, and delete Firestore book records |
-| `/FireRegister` | Register a Firebase account |
-| `/FireLogin` | Sign in with Firebase |
-| `/FirebaseAccount` | View the authenticated user and role |
+| `/get-book-count` | Task 9.1 JSON book-count interface |
+| `/book-data-service` | Task 9.2 Firestore data-package marketplace |
+| `/add-book` | Retained Lab 8 Firestore CRUD and query interface |
+| `/FireRegister` | Firebase account registration |
+| `/FireLogin` | Firebase sign-in |
+| `/FirebaseAccount` | Authenticated account and role view |
+
+## Project structure
+
+```text
+cloud-functions/
+  book-count-function/
+  book-data-service-function/
+src/
+  assets/json/books.json
+  views/GetBookCountView.vue
+  views/BookDataServiceView.vue
+```
+
+Each function directory contains its handler, automated tests, deployment
+instructions, and a remote test script. Generated ZIP files and installed
+dependencies are excluded from Git.
 
 ## Local setup
 
-Install dependencies:
+Install the Vue application dependencies:
 
 ```sh
 npm install
 ```
 
-Copy `.env.example` to `.env.local`, then enter the Firebase Web App values from Firebase Console. Do not commit `.env.local`.
-
-Create a Cloud Firestore database for the configured Firebase project before using the book features. Test Mode may be used for the assessed laboratory demonstration, but production applications require appropriately restricted Firebase Security Rules.
-
-Start the development server:
+Copy `.env.example` to `.env.local`, then add the Firebase Web App values from
+Firebase Console. Start the development server:
 
 ```sh
 npm run dev
-```
-
-Open the Add Book page at:
-
-```text
-http://localhost:5173/add-book
 ```
 
 Create a production build:
@@ -83,9 +83,21 @@ Create a production build:
 npm run build
 ```
 
-## Assessed Lab 8 coverage
+Run the cloud-function tests:
 
-- **Task 8.1:** Add Book browser page, source implementation, and newly created Firestore document
-- **Task 8.2:** Browser and source evidence for `where`, `orderBy`, `limit`, update, and delete operations
+```sh
+cd cloud-functions/book-count-function
+npm test
 
-All Firebase configuration values are loaded from Vite environment variables. Local secrets and generated production files are excluded from version control.
+cd ../book-data-service-function
+npm test
+```
+
+## Security
+
+- `.env.local` is excluded from version control.
+- Firebase service-account JSON files and private keys must never be committed.
+- Alibaba Cloud OAuth working files, deployment ZIP files, `node_modules`, and
+  build output are excluded from version control.
+- Firebase Admin credentials are configured only as cloud-function environment
+  variables.

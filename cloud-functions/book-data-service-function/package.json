@@ -1,0 +1,17 @@
+{
+  "name": "fit5032-lab9-book-data-service-function",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Task 9.2 Firestore book-data package service for Alibaba Cloud Function Compute.",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.5.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

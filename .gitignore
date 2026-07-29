@@ -13,6 +13,8 @@ dist
 dist-ssr
 coverage
 *.local
+*-firebase-adminsdk-*.json
+service-account*.json
 
 # Editor directories and files
 .vscode/*
@@ -37,3 +39,6 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Local generated working files
+/tmp/
