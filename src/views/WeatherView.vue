@@ -3,6 +3,7 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 
 const weather = ref(null)
+const city = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const locationMessage = ref('Requesting your current location...')
@@ -12,6 +13,19 @@ const weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather'
 
 const iconUrl = (iconCode) =>
   iconCode ? `https://openweathermap.org/img/wn/${iconCode}@2x.png` : ''
+
+const requestWeather = async (params, successMessage) => {
+  const response = await axios.get(weatherApiUrl, {
+    params: {
+      ...params,
+      appid: weatherApiKey,
+      units: 'metric',
+    },
+  })
+
+  weather.value = response.data
+  locationMessage.value = successMessage
+}
 
 const loadCurrentWeather = () => {
   weather.value = null
@@ -36,17 +50,13 @@ const loadCurrentWeather = () => {
       locationMessage.value = 'Loading weather for your current location...'
 
       try {
-        const response = await axios.get(weatherApiUrl, {
-          params: {
+        await requestWeather(
+          {
             lat: coords.latitude,
             lon: coords.longitude,
-            appid: weatherApiKey,
-            units: 'metric',
           },
-        })
-
-        weather.value = response.data
-        locationMessage.value = 'Weather loaded from your current location.'
+          'Weather loaded from your current location.',
+        )
       } catch (error) {
         console.error('Current weather request failed:', error)
         errorMessage.value =
@@ -75,6 +85,37 @@ const loadCurrentWeather = () => {
   )
 }
 
+const searchByCity = async () => {
+  const cityQuery = city.value.trim()
+
+  if (!cityQuery) {
+    errorMessage.value = 'Enter a city and country, for example Clayton, AU.'
+    return
+  }
+
+  if (!weatherApiKey) {
+    errorMessage.value =
+      'The weather API key is not configured. Add VITE_OPENWEATHER_API_KEY to .env.local and restart Vite.'
+    return
+  }
+
+  isLoading.value = true
+  errorMessage.value = ''
+  weather.value = null
+  locationMessage.value = `Searching weather for ${cityQuery}...`
+
+  try {
+    await requestWeather({ q: cityQuery }, `Weather loaded for ${cityQuery}.`)
+  } catch (error) {
+    console.error('City weather request failed:', error)
+    errorMessage.value =
+      error.response?.data?.message ||
+      'The city could not be found. Check the city and country format and try again.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
 onMounted(loadCurrentWeather)
 </script>
 
@@ -93,6 +134,24 @@ onMounted(loadCurrentWeather)
       </div>
 
       <section class="weather-panel mt-4" aria-live="polite">
+        <form class="city-search" @submit.prevent="searchByCity">
+          <label for="city" class="form-label fw-semibold">Search weather by city</label>
+          <div class="input-group">
+            <input
+              id="city"
+              v-model="city"
+              type="search"
+              class="form-control"
+              placeholder="Enter city name, e.g. Clayton, AU"
+              autocomplete="address-level2"
+            />
+            <button type="submit" class="btn btn-primary" :disabled="isLoading">
+              Search
+            </button>
+          </div>
+          <small class="text-secondary">Use the format City, Country code.</small>
+        </form>
+
         <div v-if="isLoading" class="status-message">
           <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
           {{ locationMessage }}
@@ -189,6 +248,12 @@ onMounted(loadCurrentWeather)
 
 .weather-panel {
   padding: 2rem;
+}
+
+.city-search {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5ebf1;
 }
 
 .status-message {
