@@ -42,6 +42,11 @@ const handleLogout = () => {
             Data Packages
           </RouterLink>
         </li>
+        <li class="nav-item">
+          <RouterLink to="/WeatherCheck" class="nav-link" active-class="active">
+            Get Weather
+          </RouterLink>
+        </li>
         <li v-if="!isAuthenticated" class="nav-item">
           <RouterLink to="/login" class="nav-link" active-class="active">Week 5 Login</RouterLink>
         </li>

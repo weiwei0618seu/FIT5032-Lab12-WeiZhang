@@ -9,6 +9,7 @@ import FirebaseAccountView from '../views/FirebaseAccountView.vue'
 import AddBookView from '../views/AddBookView.vue'
 import GetBookCountView from '../views/GetBookCountView.vue'
 import BookDataServiceView from '../views/BookDataServiceView.vue'
+import WeatherView from '../views/WeatherView.vue'
 import { isAuthenticated } from '../services/auth'
 
 const routes = [
@@ -62,6 +63,11 @@ const routes = [
     path: '/book-data-service',
     name: 'BookDataService',
     component: BookDataServiceView,
+  },
+  {
+    path: '/WeatherCheck',
+    name: 'GetWeather',
+    component: WeatherView,
   },
 ]
 
