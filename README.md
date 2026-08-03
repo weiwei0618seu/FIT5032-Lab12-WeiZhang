@@ -1,50 +1,67 @@
-# FIT5032 Assessed Lab 9
+# FIT5032 Assessed Lab 10
 
-Serverless cloud-function implementation for the NoMash Library Vue application.
-The project extends the Lab 8 Firestore application with two Alibaba Cloud
-Function Compute services.
+Vue.js application for FIT5032 Assessed Lab 10. The project demonstrates
+external API integration with OpenWeatherMap and a custom library data API.
+The application is built on the previous NoMash Library project and retains
+the earlier Firebase and book-management features.
 
-## Lab 9 features
+## Lab 10 features
 
-### Task 9.1 — JSON book count
+### Task 10.1 - Current location weather
 
-- Sends the local `books.json` dataset to an HTTP cloud function.
-- Validates the request and calculates the number of book objects.
-- Displays the returned count and cloud response in the Vue interface.
-- Supports browser CORS preflight requests.
+- Uses the browser Geolocation API to obtain latitude and longitude.
+- Sends the coordinates to OpenWeatherMap with Axios.
+- Displays the detected location, temperature in degrees Celsius, weather
+  description, and weather icon.
 
-Deployed endpoint:
+### Task 10.1 - Author and book counts
 
-```text
-https://book-cofunction-cdfmfbrftp.cn-hangzhou.fcapp.run
-```
+- Calls the library data API using an HTTP POST request.
+- Calculates and displays the number of authors and books.
+- Shows loading, success, retry, and error states.
 
-### Task 9.2 — Firestore book data service
+### Task 10.2 - City weather search
 
-- Reads live records from the Cloud Firestore `books` collection with the
-  Firebase Admin SDK.
-- Provides Basic, Standard, and Premium data packages.
-- Applies package-specific record limits, included fields, and prices.
-- Displays the generated package as a digital-data order with a responsive
-  result table.
-- Returns safe client errors without exposing Firestore or credential details.
+- Accepts a city and country value such as `Clayton, AU`.
+- Uses the OpenWeatherMap `q` parameter to search by city.
+- Displays the returned location, Celsius temperature, description, and icon.
 
-Deployed endpoint:
+### Task 10.2 - GetAllBookAPI
 
-```text
-https://book-dafunction-tgkjwdwopa.cn-hongkong.fcapp.run
-```
+- Calls the library data API for the Premium book data package.
+- Displays all returned book records as formatted JSON.
+- Shows the request status and number of returned records.
 
 ## Application routes
 
 | Route | Purpose |
 | --- | --- |
-| `/get-book-count` | Task 9.1 JSON book-count interface |
-| `/book-data-service` | Task 9.2 Firestore data-package marketplace |
-| `/add-book` | Retained Lab 8 Firestore CRUD and query interface |
+| `/WeatherCheck` | Current-location weather and city weather search |
+| `/CountBookAPI` | Author and book count API page |
+| `/GetAllBookAPI` | All books displayed as formatted JSON |
+| `/get-book-count` | Retained Lab 9 book-count interface |
+| `/book-data-service` | Retained Lab 9 Firestore data-package interface |
+| `/add-book` | Retained Lab 8 Firestore book interface |
 | `/FireRegister` | Firebase account registration |
-| `/FireLogin` | Firebase sign-in |
+| `/FireLogin` | Firebase sign in |
 | `/FirebaseAccount` | Authenticated account and role view |
+
+## API configuration
+
+The weather request uses the OpenWeatherMap endpoint:
+
+```text
+https://api.openweathermap.org/data/2.5/weather
+```
+
+The library data service endpoint is configured with:
+
+```text
+VITE_BOOK_DATA_SERVICE_URL
+```
+
+If this variable is not set, the application uses the configured default
+deployment endpoint in the Vue views.
 
 ## Project structure
 
@@ -53,14 +70,14 @@ cloud-functions/
   book-count-function/
   book-data-service-function/
 src/
+  assets/json/authors.json
   assets/json/books.json
-  views/GetBookCountView.vue
-  views/BookDataServiceView.vue
+  components/BHeader.vue
+  router/index.js
+  views/WeatherView.vue
+  views/CountBookAPIView.vue
+  views/GetAllBookAPIView.vue
 ```
-
-Each function directory contains its handler, automated tests, deployment
-instructions, and a remote test script. Generated ZIP files and installed
-dependencies are excluded from Git.
 
 ## Local setup
 
@@ -70,20 +87,33 @@ Install the Vue application dependencies:
 npm install
 ```
 
-Copy `.env.example` to `.env.local`, then add the Firebase Web App values from
-Firebase Console. Start the development server:
+Copy the example environment file and add the local Firebase and weather API
+configuration:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Set the following value in `.env.local`:
+
+```env
+VITE_OPENWEATHER_API_KEY=your_private_api_key
+```
+
+The API key must remain in `.env.local` and must never be committed to Git.
+Start the development server with:
 
 ```sh
 npm run dev
 ```
 
-Create a production build:
+Create a production build with:
 
 ```sh
 npm run build
 ```
 
-Run the cloud-function tests:
+Run the cloud-function tests with:
 
 ```sh
 cd cloud-functions/book-count-function
@@ -96,8 +126,16 @@ npm test
 ## Security
 
 - `.env.local` is excluded from version control.
+- OpenWeatherMap API keys must not be written into Vue source files,
+  screenshots, or the public repository.
 - Firebase service-account JSON files and private keys must never be committed.
-- Alibaba Cloud OAuth working files, deployment ZIP files, `node_modules`, and
-  build output are excluded from version control.
+- Cloud deployment ZIP files, `node_modules`, logs, and build output are
+  excluded from Git.
 - Firebase Admin credentials are configured only as cloud-function environment
   variables.
+
+## Repository
+
+```text
+https://github.com/weiwei0618seu/FIT5032-Lab10-WeiZhang
+```
