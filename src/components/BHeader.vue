@@ -52,6 +52,11 @@ const handleLogout = () => {
             Count Book API
           </RouterLink>
         </li>
+        <li class="nav-item">
+          <RouterLink to="/GetAllBookAPI" class="nav-link" active-class="active">
+            GetAllBookAPI
+          </RouterLink>
+        </li>
         <li v-if="!isAuthenticated" class="nav-item">
           <RouterLink to="/login" class="nav-link" active-class="active">Week 5 Login</RouterLink>
         </li>
