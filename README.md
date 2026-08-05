@@ -1,141 +1,122 @@
-# FIT5032 Assessed Lab 10
+# FIT5032 Assessed Lab 11
 
-Vue.js application for FIT5032 Assessed Lab 10. The project demonstrates
-external API integration with OpenWeatherMap and a custom library data API.
-The application is built on the previous NoMash Library project and retains
-the earlier Firebase and book-management features.
+Vue.js application deployed to Cloudflare Pages for FIT5032 Assessed Lab 11.
+The project builds on the previous assessed labs and includes Firebase
+authentication, Firestore features, library API pages, and OpenWeatherMap
+weather functions.
 
-## Lab 10 features
+## Live deployment
 
-### Task 10.1 - Current location weather
+- Application: <https://fit5032-lab11-weizhang.pages.dev/>
+- Get Weather: <https://fit5032-lab11-weizhang.pages.dev/WeatherCheck>
+- GitHub repository: <https://github.com/weiwei0618seu/FIT5032-Lab11-WeiZhang>
+- Cloudflare Pages project: `fit5032-lab11-weizhang`
 
-- Uses the browser Geolocation API to obtain latitude and longitude.
-- Sends the coordinates to OpenWeatherMap with Axios.
-- Displays the detected location, temperature in degrees Celsius, weather
-  description, and weather icon.
+## Lab 11 deployment configuration
 
-### Task 10.1 - Author and book counts
+| Setting | Value |
+| --- | --- |
+| Platform | Cloudflare Pages |
+| Framework preset | Vue |
+| Production branch | `main` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node.js version | `22.18.0` |
 
-- Calls the library data API using an HTTP POST request.
-- Calculates and displays the number of authors and books.
-- Shows loading, success, retry, and error states.
+The current production deployment can also be reproduced with Wrangler:
 
-### Task 10.2 - City weather search
+```sh
+npm ci
+npm run build
+npx wrangler pages deploy dist --project-name fit5032-lab11-weizhang --branch main
+```
 
-- Accepts a city and country value such as `Clayton, AU`.
-- Uses the OpenWeatherMap `q` parameter to search by city.
-- Displays the returned location, Celsius temperature, description, and icon.
+## Main features
 
-### Task 10.2 - GetAllBookAPI
-
-- Calls the library data API for the Premium book data package.
-- Displays all returned book records as formatted JSON.
-- Shows the request status and number of returned records.
+- Current-location weather using the browser Geolocation API.
+- City and country weather search using OpenWeatherMap.
+- Celsius temperature, weather description, and weather icon display.
+- Firebase account registration, sign-in, account, and role features.
+- Firestore book-management functionality.
+- Author/book count and complete-book-list API pages.
+- Vue Router navigation and protected routes.
 
 ## Application routes
 
 | Route | Purpose |
 | --- | --- |
-| `/WeatherCheck` | Current-location weather and city weather search |
+| `/` | Application home page |
+| `/WeatherCheck` | Current-location and city weather search |
 | `/CountBookAPI` | Author and book count API page |
 | `/GetAllBookAPI` | All books displayed as formatted JSON |
-| `/get-book-count` | Retained Lab 9 book-count interface |
-| `/book-data-service` | Retained Lab 9 Firestore data-package interface |
-| `/add-book` | Retained Lab 8 Firestore book interface |
+| `/get-book-count` | Book-count interface |
+| `/book-data-service` | Firestore data-package interface |
+| `/add-book` | Firestore book interface |
 | `/FireRegister` | Firebase account registration |
-| `/FireLogin` | Firebase sign in |
+| `/FireLogin` | Firebase sign-in page |
 | `/FirebaseAccount` | Authenticated account and role view |
-
-## API configuration
-
-The weather request uses the OpenWeatherMap endpoint:
-
-```text
-https://api.openweathermap.org/data/2.5/weather
-```
-
-The library data service endpoint is configured with:
-
-```text
-VITE_BOOK_DATA_SERVICE_URL
-```
-
-If this variable is not set, the application uses the configured default
-deployment endpoint in the Vue views.
-
-## Project structure
-
-```text
-cloud-functions/
-  book-count-function/
-  book-data-service-function/
-src/
-  assets/json/authors.json
-  assets/json/books.json
-  components/BHeader.vue
-  router/index.js
-  views/WeatherView.vue
-  views/CountBookAPIView.vue
-  views/GetAllBookAPIView.vue
-```
 
 ## Local setup
 
-Install the Vue application dependencies:
+Install the dependencies:
 
 ```sh
 npm install
 ```
 
-Copy the example environment file and add the local Firebase and weather API
-configuration:
+Copy the environment template:
 
 ```powershell
 Copy-Item .env.example .env.local
 ```
 
-Set the following value in `.env.local`:
-
-```env
-VITE_OPENWEATHER_API_KEY=your_private_api_key
-```
-
-The API key must remain in `.env.local` and must never be committed to Git.
-Start the development server with:
+Add the required values to `.env.local`, then start the development server:
 
 ```sh
 npm run dev
 ```
 
-Create a production build with:
+Create a production build:
 
 ```sh
 npm run build
 ```
 
-Run the cloud-function tests with:
+## Environment variables
 
-```sh
-cd cloud-functions/book-count-function
-npm test
+The project uses the following Vite environment variables:
 
-cd ../book-data-service-function
-npm test
+```text
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+VITE_FIREBASE_MEASUREMENT_ID
+VITE_FIREBASE_ADMIN_EMAILS
+VITE_BOOK_DATA_SERVICE_URL
+VITE_OPENWEATHER_API_KEY
 ```
+
+Configure the corresponding values in Cloudflare Pages before using a
+Cloudflare-managed Git build. After changing a build-time variable, create a
+new deployment.
 
 ## Security
 
-- `.env.local` is excluded from version control.
-- OpenWeatherMap API keys must not be written into Vue source files,
-  screenshots, or the public repository.
-- Firebase service-account JSON files and private keys must never be committed.
-- Cloud deployment ZIP files, `node_modules`, logs, and build output are
-  excluded from Git.
-- Firebase Admin credentials are configured only as cloud-function environment
-  variables.
+- `.env.local` and other `*.local` files are excluded from Git.
+- API keys and Firebase configuration values must not be committed to the
+  repository or shown in assessment screenshots.
+- Firebase service-account JSON files and private keys must never be
+  committed.
+- `node_modules`, `dist`, logs, generated deployment files, and temporary
+  working files are excluded from Git.
 
-## Repository
+## Version-control workflow
 
-```text
-https://github.com/weiwei0618seu/FIT5032-Lab10-WeiZhang
+```sh
+git add README.md package.json package-lock.json .gitignore
+git commit -m "Document Lab 11 Cloudflare deployment"
+git push lab11 main
 ```
