@@ -10,6 +10,8 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  // GitHub Pages serves this project under the repository name.
+  base: '/FIT5032-Lab12-WeiZhang/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
